@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Herramienta educativa para explorar, escuchar y entender documentos PDF, PowerPoint e imágenes.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; worker-src 'self' blob:; img-src 'self' blob: data:; object-src 'none'; base-uri 'none'; form-action 'none'; connect-src 'self'; font-src 'self' blob: data:">
+<title>Diapositivas que hablan</title>
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./estilo.css">
+<script src="./vendor/jszip.min.js" defer></script>
+<script type="module" src="./app.mjs"></script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="site"><div class="wrap mast"><span class="signature"><img src="./favicon.svg" alt="" width="32" height="32">Orientación educativa</span><a href="#ajustes">Accesibilidad</a></div></header>
+<main class="wrap" id="contenido">
+<div class="opening">
+<div class="cover">
+<h1>Diapositivas <em>que hablan</em></h1>
+</div>
+<section class="card upload" aria-labelledby="abrir">
+<h2 id="abrir">Abre un documento o una imagen</h2>
+<label for="archivo">Selecciona PDF, PowerPoint (.pptx) o una imagen (PNG, JPG, WebP)</label>
+<p class="note" id="limites">Hasta 20 MB por archivo y 40 páginas por documento. El archivo se procesa en tu dispositivo.</p>
+<input id="archivo" type="file" accept=".pdf,.pptx,.png,.jpg,.jpeg,.webp" aria-describedby="limites">
+<div class="row"><button id="cerrar" type="button" class="secondary" hidden>Cerrar archivo</button></div>
+</section>
+</div>
+<p id="estado" role="status" aria-atomic="true"></p>
+<section id="visor" class="card" hidden aria-labelledby="titulo">
+<h2 id="titulo" tabindex="-1"></h2>
+<div id="visual-col">
+<p id="visual-nota" class="note"></p>
+<div id="visual" aria-hidden="true"></div>
+</div>
+
+<div class="voice">
+<div class="row audio">
+<button id="leer-original" type="button" class="secondary"><svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4zM15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Leer original</span></button>
+<button id="escuchar" type="button" aria-describedby="ia-ayuda"><svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4zM15 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/></svg><span>Escuchar explicación</span></button>
+<button id="detener" type="button" class="secondary" disabled>Detener</button>
+</div>
+<p id="ia-ayuda" class="note"></p>
+<p id="voz-ayuda" class="note"></p>
+</div>
+<nav id="navegacion" aria-label="Navegación por páginas" class="nav">
+<button id="anterior" type="button" class="secondary">Anterior</button>
+<p id="posicion" class="eyebrow"></p>
+<button id="siguiente" type="button" class="secondary">Siguiente</button>
+</nav>
+<div class="text-actions row">
+<button id="ver-original" type="button" class="secondary" aria-expanded="false" aria-controls="texto-original">Ver el texto original</button>
+<button id="ver-explicacion" type="button" class="secondary" aria-expanded="false" aria-controls="texto-explicacion">Ver explicación escrita</button>
+</div>
+<div id="texto-original" class="reading-panel" hidden><div id="original"></div></div>
+<div id="texto-explicacion" class="reading-panel" hidden>
+<button id="explicar" type="button" class="secondary" aria-describedby="ia-ayuda">Generar explicación escrita</button>
+<div id="resultado" hidden>
+<h3>Explicación</h3><p id="explicacion"></p>
+<div id="apoyo-visual" hidden><h3>Apoyo visual</h3><p id="descripcion"></p></div>
+</div>
+</div>
+</section>
+<details class="privacy">
+<summary>Formatos</summary>
+<p>La aplicación no envía ni guarda los archivos. La explicación local requiere un Chrome compatible y puede necesitar una descarga inicial del modelo.</p>
+<p>Las imágenes PNG, JPG y WebP se explican a partir de lo que se ve en ellas. El texto que aparezca puede interpretarse si es legible.</p>
+<p>Usa un archivo que tengas permiso para consultar. Si tienes un PowerPoint antiguo (.ppt), expórtalo a PDF o guárdalo como PowerPoint (.pptx). Para conservar la composición visual, elige PDF.</p>
+</details>
+<details id="ajustes" class="card settings">
+<summary>Ajustes de accesibilidad</summary>
+<div class="settings-grid">
+<div><label for="tamano">Tamaño del texto</label><select id="tamano"><option value="normal">Normal</option><option value="pequeno">Más pequeño</option><option value="grande">Más grande</option></select></div>
+<div><label for="contraste">Contraste</label><select id="contraste"><option value="normal">Original</option><option value="alto">Blanco sobre negro</option><option value="claro">Negro sobre blanco</option></select></div>
+<div><label for="ritmo">Velocidad de lectura</label><select id="ritmo"><option value=".75">Más lenta</option><option value="1" selected>Normal</option><option value="1.25">Más rápida</option></select></div>
+<div><label for="selector-voz">Voz de lectura</label><select id="selector-voz" autocomplete="off"><option value="local">Voz local en español</option><option value="google">Google español (en línea)</option></select></div>
+</div>
+</details>
+
+</main>
+<footer class="wrap author">Carmen Martínez Mora</footer>
+
+</body>
+</html>
+r-voz" autocomplete="off"><option value="local">Voz local en español</option><option value="google">Google español (en línea)</option></select></div>
+</div>
+</details>
+
+</main>
+<footer class="wrap author">Carmen Martínez Mora</footer>
+
+</body>
+</html>
